@@ -12,7 +12,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-@Service
 public class StorageClient
 {
 	public Optional<String> get(String bucketName, String objectName)

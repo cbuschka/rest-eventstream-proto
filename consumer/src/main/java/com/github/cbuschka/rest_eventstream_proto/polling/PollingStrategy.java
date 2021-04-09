@@ -1,4 +1,4 @@
-package com.github.cbuschka.rest_eventstream_proto.consumer;
+package com.github.cbuschka.rest_eventstream_proto.polling;
 
 import java.util.function.Supplier;
 

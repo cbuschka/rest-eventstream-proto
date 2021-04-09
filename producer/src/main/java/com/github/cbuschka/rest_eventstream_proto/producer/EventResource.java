@@ -19,7 +19,7 @@ public class EventResource
 	public ResponseEntity<GetEventsResponse> getEvents(@RequestParam(name = "last", required = false) String lastEvent,
 													   @RequestParam(name = "limit", required = false, defaultValue = "100") int limit)
 	{
-		List<Event> events = this.eventStore.getEvents(lastEvent, limit);
-		return ResponseEntity.ok(new GetEventsResponse(events));
+		GetEventsResponse response = this.eventStore.getEvents(lastEvent, limit);
+		return ResponseEntity.ok(response);
 	}
 }

@@ -1,17 +1,19 @@
 package com.github.cbuschka.rest_eventstream_proto.consumer;
 
+import com.github.cbuschka.rest_eventstream_proto.event_feed_importer.PointerStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
-public class PointerService
+public class PointerService implements PointerStore
 {
-	@Autowired
-	private StorageClient storageClient;
+	private final StorageClient storageClient;
 
-	private String pointer;
+	public PointerService(StorageClient storageClient)
+	{
+		this.storageClient = storageClient;
+	}
 
 	public void setPointer(String pointer)
 	{

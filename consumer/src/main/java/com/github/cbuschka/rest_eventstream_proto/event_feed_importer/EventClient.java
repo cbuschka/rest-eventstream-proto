@@ -1,7 +1,7 @@
-package com.github.cbuschka.rest_eventstream_proto.consumer;
+package com.github.cbuschka.rest_eventstream_proto.event_feed_importer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.stereotype.Service;
+import com.github.cbuschka.rest_eventstream_proto.consumer.GetEventsResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,12 +10,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-@Service
 public class EventClient
 {
+	private String url;
+
 	private ObjectMapper objectMapper = new ObjectMapper();
 
-	public List<GetEventsResponse.Event> get(String last, int limit)
+	public EventClient(String url)
+	{
+		this.url = url;
+	}
+
+	public GetEventsResponse get(String last, int limit)
 	{
 		HttpURLConnection httpURLConnection = null;
 		try
@@ -27,8 +33,7 @@ public class EventClient
 				throw new IOException("Failed: " + responseCode);
 			}
 			InputStream in = httpURLConnection.getInputStream();
-			GetEventsResponse response = objectMapper.readerFor(GetEventsResponse.class).readValue(in);
-			return response.events;
+			return objectMapper.readerFor(GetEventsResponse.class).readValue(in);
 		}
 		catch (IOException ex)
 		{
@@ -47,11 +52,11 @@ public class EventClient
 	{
 		if (last != null)
 		{
-			return new URL("http://localhost:8080/events?last=" + last + "&limit=" + limit);
+			return new URL(this.url + "?last=" + last + "&limit=" + limit);
 		}
 		else
 		{
-			return new URL("http://localhost:8080/events?limit=" + limit);
+			return new URL(this.url + "?limit=" + limit);
 		}
 	}
 }

@@ -18,10 +18,10 @@ public class EventGenerator
 
 	private int seq = 0;
 
-	@Scheduled(fixedDelay = 10 * 1000L)
+	@Scheduled(fixedDelay = 1000L)
 	public void generateEvent()
 	{
-		int n = random.nextInt(100);
+		int n = random.nextInt(10000);
 		for (int i = 0; i < n; ++i)
 		{
 			this.eventStore.addEvent(new Event(String.valueOf(seq++)));

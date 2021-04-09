@@ -1,5 +1,6 @@
 package com.github.cbuschka.rest_eventstream_proto.producer;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class EventStore
 {
 	private final List<Event> events = new LinkedList<>();
@@ -17,10 +19,10 @@ public class EventStore
 		this.events.add(event);
 	}
 
-	public synchronized List<Event> getEvents(String lastEventOrNull, int limit)
+	public synchronized GetEventsResponse getEvents(String lastEventOrNull, int limit)
 	{
 		if (limit < 1) limit = 1;
-		if (limit > 100) limit = 100;
+		if (limit > 10000) limit = 10000;
 		if (lastEventOrNull != null && lastEventOrNull.trim().length() == 0)
 		{
 			lastEventOrNull = null;
@@ -49,6 +51,12 @@ public class EventStore
 			throw new IllegalStateException("Last " + lastEventOrNull + " not found.");
 		}
 
-		return next;
+		int pendingCount = 0;
+		if (!next.isEmpty())
+		{
+			pendingCount = this.events.size() - this.events.indexOf(next.get(next.size() - 1)) - 1;
+		}
+
+		return new GetEventsResponse(next, pendingCount);
 	}
 }

@@ -6,6 +6,8 @@ import java.util.List;
 
 public class GetEventsResponse
 {
+	public int pendingCount;
+
 	public List<Event> events;
 
 	@ToString
